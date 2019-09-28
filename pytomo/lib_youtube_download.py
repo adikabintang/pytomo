@@ -56,7 +56,7 @@ class YoutubeIE(lib_general_download.InfoExtractor):
 #                  '(?:$|[^a-z_A-Z0-9-])))|ytuser:)(?!feed/)([A-Za-z0-9_-]+)')
     _VALID_URL_CHANNEL = (r'^(?:https?://)?(?:youtu\.be|(?:\w+\.)?youtube'
                           '(?:-nocookie)?\.com)/channel/([0-9A-Za-z_-]+)')
-    _TEMPLATE_URL_CHANNEL = (r'http://www.youtube.com/channel/%s/videos?'
+    _TEMPLATE_URL_CHANNEL = (r'https://www.youtube.com/channel/%s/videos?'
                              'sort=da&flow=list&view=0&page=%s&gl=US&hl=en')
     _URL_GROUP_NB_VIDEO_ID = 2
     #_LANG_URL = (r'http://www.youtube.com/?' +
@@ -126,7 +126,7 @@ class YoutubeIE(lib_general_download.InfoExtractor):
         self.report_video_webpage_download(video_id)
         video_info = None
         for el_type in ['&el=embedded', '&el=detailpage', '&el=vevo', '']:
-            video_info_url = ('http://www.youtube.com/get_video_info?\
+            video_info_url = ('https://www.youtube.com/get_video_info?\
 &video_id=%s%s&ps=default&eurl=&gl=US&hl=en' % (video_id, el_type))
             request = urllib2.Request(video_info_url, None,
                                       config_pytomo.STD_HEADERS)
@@ -146,6 +146,9 @@ class YoutubeIE(lib_general_download.InfoExtractor):
                     % str(err))
                 return
         if 'token' not in video_info:
+            video_info['token'] = video_info.get('account_playback_token')
+
+        if 'token' not in video_info:
             if 'reason' in video_info:
                 self._downloader.trouble(u'ERROR: YouTube said: %s'
                                          % video_info['reason'][0].decode(
@@ -162,7 +165,7 @@ class YoutubeIE(lib_general_download.InfoExtractor):
     @staticmethod
     def get_swf(video_webpage, mobj):
         "Attempt to extract SWF player URL"
-        mobj = re.search(r'swfConfig.*?"(http:\\/\\/.*?watch.*?-.*?\.swf)"',
+        mobj = re.search(r'swfConfig.*?"(https:\\/\\/.*?watch.*?-.*?\.swf)"',
                          video_webpage)
         if mobj is not None:
             player_url = re.sub(r'\\(.)', r'\1', mobj.group(1))
@@ -178,7 +181,7 @@ class YoutubeIE(lib_general_download.InfoExtractor):
         """
         video_url_list = None
         #req_format = self._downloader.params.get('format', None)
-        get_video_template = ('http://www.youtube.com/get_video?'
+        get_video_template = ('https://www.youtube.com/get_video?'
                               + 'video_id=%s&t=%s&eurl=&el=&ps=&asv=&fmt=%%s'
                               % (video_id, video_token))
         if 'fmt_url_map' in video_info:
