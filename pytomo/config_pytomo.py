@@ -88,7 +88,14 @@ STD_HEADERS = {
 ################################################################################
 # for start_pytomo.py
 
-STATIC_URL_LIST = []
+STATIC_URL_LIST = [
+    'https://www.youtube.com/watch?v=OQj_m3iV8gA',
+    'https://www.youtube.com/watch?v=926yzLioIxQ',
+    'https://www.youtube.com/watch?v=6AcE7hBhpYU',
+    'https://www.youtube.com/watch?v=SE_ccFHjL_w',
+    'https://www.youtube.com/watch?v=BRU-e7_Rm_M&t=1s'
+    ]
+
 INPUT_FILE = None
 
 # Max number of rounds to perform
